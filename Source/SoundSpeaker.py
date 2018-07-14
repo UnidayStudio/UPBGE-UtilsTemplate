@@ -34,12 +34,10 @@ class SoundSpeaker(bge.types.KX_PythonComponent):
 		# Loading the device...
 		self.device  = aud.device()
 		self.device.distance_model = aud.AUD_DISTANCE_MODEL_LINEAR
-		self.device.distance_model = aud.AUD_DISTANCE_MODEL_LINEAR
 
 		# Loading the sound...
 		sName = bge.logic.expandPath("//")+args["Sound File"]
 		self.factory = aud.Factory(sName)
-		self.factory.volume(args["Volume"])
 
 		# Playing the sound...
 		self.handle = self.device.play(self.factory)
@@ -50,6 +48,8 @@ class SoundSpeaker(bge.types.KX_PythonComponent):
 		self.handle.distance_maximum   = abs(args["Max Distance"])
 		self.handle.distance_reference = abs(args["Min Distance"])
 		self.handle.pitch = args["Pitch"]
+
+		self.handle.volume = args["Volume"]
 
 		if args["Loop Sound"]:
 			self.handle.loop_count = -1
