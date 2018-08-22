@@ -1,33 +1,49 @@
 ###############################################################################
-#             Mouse Click Controller | Template v 1.0 | UPBGE 0.2.3           #
+#               Minimap Controller | Template v 1.0 | UPBGE 0.2.3             #
 ###############################################################################
 #                      Created by: Guilherme Teres Nunes                      #
 #                       Access: youtube.com/UnidayStudio                      #
 #                               github.com/UnidayStudio                       #
-###############################################################################
-# This component will spawn a minimap based on the camera (which owns the
-# component) view. Add this component to a camera and position it on top of
-# your character.
-# You can read a small doc about this Component here:
-# https://github.com/UnidayStudio/UPBGE-UtilsTemplate
+# 				github.com/UnidayStudio/UPBGE-UtilsTemplate					  #
 ###############################################################################
 import bge
 from mathutils import Vector
+from collections import OrderedDict
 
 class Minimap(bge.types.KX_PythonComponent):
-	args = {
-		"Camera Type"		: {"Perspective", "Orthographic"},
-		"Camera Height"		: 10.0,
-		"Minimap Position"  : Vector([0.11,0.11]),
-		"Minimap Size"      : Vector([0.2,0.2]),
-		"Follow Object"		: "",
-		"Rotate on Z axis"	: False,
-	}
+	""" This component will spawn a minimap based on the camera (which owns the
+	component) view. Add this component to a camera and position it on top of
+	your character.
+	You can read a small doc about this Component here:
+	https://github.com/UnidayStudio/UPBGE-UtilsTemplate"""
 
-	# Start Function
+	args = OrderedDict([
+		("Activate", True),
+		("Camera Type", {"Perspective", "Orthographic"}),
+		("Camera Height", 10.0),
+		("Minimap Position", Vector([0.11,0.11])),
+		("Minimap Size", Vector([0.2,0.2])),
+		("Follow Object", ""),
+		("Rotate on Z axis", False),
+	])
+
 	def start(self, args):
+		"""Start Function"""
 		scene = bge.logic.getCurrentScene()
 		cam = scene.active_camera
+
+		# Saving some variables.
+		self.followObject = None
+		if args["Follow Object"] != "":
+			self.followObject = scene.objects[args["Follow Object"]]
+		self.rotateZaxis = args["Rotate on Z axis"]
+		self.camType = args["Camera Type"]
+		self.camHeight = args["Camera Height"]
+
+		self.active = args["Activate"]
+
+		if not self.active:
+			return
 
 		# Adjusting the viewports to show two cameras.
 		wWidth = bge.render.getWindowWidth()
@@ -45,14 +61,7 @@ class Minimap(bge.types.KX_PythonComponent):
 		                        int(mEnd[0]*wWidth),   int(mEnd[1]*wHeight))
 		self.object.setOnTop()
 
-		# Saving and pre configuring some variables.
-		self.followObject = None
-		if args["Follow Object"] != "":
-			self.followObject = scene.objects[args["Follow Object"]]
-		self.rotateZaxis  = args["Rotate on Z axis"]
-		self.camType      = args["Camera Type"]
-		self.camHeight    = args["Camera Height"]
-
+		# Some pre configurations...
 		if self.camType == "Orthographic":
 			self.object.perspective = False
 			self.object.ortho_scale = self.camHeight
@@ -61,9 +70,9 @@ class Minimap(bge.types.KX_PythonComponent):
 			if self.followObject == None and self.camHeight != 0:
 				self.object.worldPosition[2] = self.camHeight
 
-	# Update Function
 	def update(self):
-		if self.followObject != None:
+		"""Update Function"""
+		if self.followObject != None and self.active:
 			self.object.worldPosition = self.followObject.worldPosition.copy()
 			if self.camType == "Perspective":
 				self.object.worldPosition[2] +=self.camHeight

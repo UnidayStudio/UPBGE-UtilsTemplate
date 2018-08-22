@@ -1,33 +1,35 @@
 ###############################################################################
-#             Mouse Click Controller | Template v 1.0 | UPBGE 0.2.3           #
+#           Sound Speaker Controller | Template v 1.0 | UPBGE 0.2.3           #
 ###############################################################################
 #                      Created by: Guilherme Teres Nunes                      #
 #                       Access: youtube.com/UnidayStudio                      #
 #                               github.com/UnidayStudio                       #
-###############################################################################
-# This component will serve as an sound Speaker for your game. With this, you
-# can easly control 3D sound, volume.
-# Unfortunatelly, the sounds needs to be mono to make the 3D sound works.
-# You can convert to mono using windows CMD like this:
-# > ffmpeg -i Sound.wav -ac 1 SoundMono.wav
+# 				github.com/UnidayStudio/UPBGE-UtilsTemplate					  #
 ###############################################################################
 import bge
 import aud
+from collections import OrderedDict
 
 class SoundSpeaker(bge.types.KX_PythonComponent):
-	args = {
-		"Sound File"	: "",
-		"Loop Sound"	: True,
-		"Volume"		: 1.0,
-		"Pitch"			: 1.0,
-		"3D Sound"		: True,
-		"Min Distance"	: 1.0,
-		"Max Distance"	: 100.0,
-		"Delete Object After End"	: False,
-	}
+	""" This component will serve as an sound Speaker for your game. With this,
+	you can easly control 3D sound, volume.
+	Unfortunatelly, the sounds needs to be mono to make the 3D sound works.
+	You can convert to mono using windows CMD like this:
+	> ffmpeg -i Sound.wav -ac 1 SoundMono.wav"""
 
-	# Start Function
+	args = OrderedDict([
+		("Sound File", ""),
+		("Loop Sound", True),
+		("Volume", 1.0),
+		("Pitch", 1.0),
+		("3D Sound", True),
+		("Min Distance", 1.0),
+		("Max Distance", 100.0),
+		("Delete Object After End", False),
+	])
+
 	def start(self, args):
+		"""Start Function"""
 		scene = bge.logic.getCurrentScene()
 		cam = scene.active_camera
 
@@ -58,22 +60,22 @@ class SoundSpeaker(bge.types.KX_PythonComponent):
 
 		self.__deleteObj = args["Delete Object After End"]
 
-	# Function to pause the sound
-	def PauseSound(self):
+	def pauseSound(self):
+		"""Function to pause the sound"""
 		self.handle.pause()
 
-	# Function to resume the sound
-	def ResumeSound(self):
+	def resumeSound(self):
+		"""Function to resume the sound"""
 		self.handle.resume()
 
-	# Function to stop the sound (and delete the object)
-	def StopSound(self):
+	def stopSound(self):
+		"""Function to stop the sound (and delete the object)"""
 		self.handle.stop()
 		if self.__deleteObj:
 			self.object.endObject()
 
-	# Update Function
 	def update(self):
+		"""Update Function"""
 		scene = bge.logic.getCurrentScene()
 		cam = scene.active_camera
 
