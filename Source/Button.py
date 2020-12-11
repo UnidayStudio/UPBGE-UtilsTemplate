@@ -1,5 +1,5 @@
 ###############################################################################
-#               Button Controller | Template v 1.0 | UPBGE 0.2.3              #
+#               Button Controller | Template v 1.0 | UPBGE 0.2.5              #
 ###############################################################################
 #                      Created by: Guilherme Teres Nunes                      #
 #                       Access: youtube.com/UnidayStudio                      #
@@ -12,17 +12,17 @@
 # https://github.com/UnidayStudio/UPBGE-UtilsTemplate
 ###############################################################################
 import bge
-from mathutils import Vector
+from mathutils import Vector, Color
 
 class Button(bge.types.KX_PythonComponent):
 	args = {
 		"Activate"		    : True,
 		"Pressed Message"   : "",
 		"Released Message"  : "",
-		"Normal Color"      : Vector([0.7,0.7,0.7,1.0]),
-		"Highlighted Color" : Vector([1.0,1.0,1.0,1.0]),
-		"Pressed Color"     : Vector([0.5,0.5,0.5,1.0]),
-		"Disabled Color"    : Vector([0.2,0.2,0.2,1.0]),
+		"Normal Color"      : Color([0.7,0.7,0.7,1.0]),
+		"Highlighted Color" : Color([1.0,1.0,1.0,1.0]),
+		"Pressed Color"     : Color([0.5,0.5,0.5,1.0]),
+		"Disabled Color"    : Color([0.2,0.2,0.2,1.0]),
 	}
 
 	def start(self, args):
